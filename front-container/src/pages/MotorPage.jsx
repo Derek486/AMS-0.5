@@ -1,28 +1,38 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import './MotorStyles.css'
+import toast from "react-hot-toast";
+import api from "../api";
 
 export function MotorPage() {
   const { id } = useParams();
   const [datos, setDatos] = useState({ velocidad: [], temperatura: [], aceleracion: [] });
 
   useEffect(() => {
-    const datosSimulados = [
-      { IdMotor: id, Value: '1200', Timestamp: '2024-10-01 12:00', Axis: 'X', Medicion: 'V' },
-      { IdMotor: id, Value: '1000', Timestamp: '2024-10-01 12:05', Axis: 'Y', Medicion: 'A' },
-      { IdMotor: id, Value: '75', Timestamp: '2024-10-01 12:10', Axis: 'Z', Medicion: 'T' },
-    ];
+    toast.promise(api.get(`motores/${id}`), {
+      loading: 'Cargando datos de motor',
+      success: 'Datos obtenidos correctamente',
+      error: 'Error al obtener los datos'
+    }).then(res => {
+      const data = res.data.datos
 
-    const velocidad = datosSimulados.filter(d => d.Medicion === 'V');
-    const temperatura = datosSimulados.filter(d => d.Medicion === 'T');
-    const aceleracion = datosSimulados.filter(d => d.Medicion === 'A');
+      const velocidad = data.filter(d => d?.Medicion === 'V');
+      const temperatura = data.filter(d => d?.Medicion === 'T');
+      const aceleracion = data.filter(d => d?.Medicion === 'A');
+  
+      setDatos({ velocidad, temperatura, aceleracion });
+    }).catch(err => {
+      console.log(err);
+    })
 
-    setDatos({ velocidad, temperatura, aceleracion });
   }, [id]);
 
   return (
     <div className="motor-wrapper">
-      <h1 className="motor-title">Motor {id}</h1>
+      <header>
+        <Link to={'/'} className="action--link">Volver</Link>
+        <h1 className="motor-title">Motor {id}</h1>
+      </header>
       <div className="motor-container">
         <section className="motor-section">
           <h2>Velocidad</h2>

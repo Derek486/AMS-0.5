@@ -1,17 +1,40 @@
 import { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import useForm from "../hooks/useForm";
+import api from "../api";
+import toast from "react-hot-toast";
 import './FormStyles.css';
 
 export function RegisterPage() {
   const [form, handleForm] = useForm();
+  const navigate = useNavigate()
 
-  const register = useCallback((form) => {
-    console.log(form);
+  const register = useCallback(async (form) => {
+    toast.promise(api.post('/api/register', {
+      Apellido: form.apellidos,
+      Nombre: form.nombre,
+      Password: form.password,
+      Email: form.email
+    }), {
+      loading: 'Loading',
+      success: 'Usuario registrado',
+      error: 'Error al registrar al usuario',
+    }).then((res) => {
+      if (res.status === 200) {
+        navigate("/auth/login")
+      }
+    }).catch((err) => {
+      toast.error(err.response.data)
+    })
   }, []);
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    register(form)
+  }
+
   return (
-    <form className="form-container" onSubmit={() => register(form)}>
+    <form className="form-container" onSubmit={handleSubmit}>
       <div className="form-header">
         <h1>Register Page</h1>
       </div>

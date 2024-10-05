@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask Kafka Producer</title>
+</head>
+<body>
+    <h1>Selecciona el tipo de medición y motor para enviar a Kafka</h1>
+
+    <label for="motorSelect">Seleccionar Motor:</label>
+    <select id="motorSelect">
+        <!-- Los motores serán cargados aquí dinámicamente -->
+    </select>
+
+    <br><br>
+
+    <button id="accelerationButton" onclick="toggleSending('acceleration')">Aceleración</button>
+    <button id="temperatureButton" onclick="toggleSending('temperature')">Temperatura</button>
+    <button id="velocityButton" onclick="toggleSending('velocity')">Velocidad</button>
+
+    <script>
+        // Cargar los motores desde el endpoint /api/motores
+        fetch('/get_motors')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const motorSelect = document.getElementById('motorSelect');
+                data.forEach(motor => {
+                    let option = document.createElement('option');
+                    option.value = motor.id;
+                    option.text = motor.nombre;
+                    motorSelect.appendChild(option);
+                });
+            });
+
+        let sending = {
+            'acceleration': false,
+            'temperature': false,
+            'velocity': false
+        };
+
+        function toggleSending(type) {
+            const motorId = document.getElementById('motorSelect').value;
+            if (motorId) {
+                sending[type] = !sending[type];
+                if (sending[type]) {
+                    fetch(`/start_sending/${type}/${motorId}`);
+                } else {
+                    fetch(`/stop_sending/${type}`);
+                }
+            } else {
+                alert('Por favor selecciona un motor.');
+            }
+        }
+    </script>
+</body>
+</html>

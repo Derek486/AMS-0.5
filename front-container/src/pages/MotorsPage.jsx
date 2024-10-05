@@ -1,9 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import './MotorsStyles.css'
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useMotores from "../hooks/useMotores";
+import api from "../api";
+import toast from "react-hot-toast";
+import clsx from "clsx";
 
 export function MotorsPage() {
-  const [motors, setMotors] = useState([]);
+  const { motores, loading, error, fetchMotores, setMotores } = useMotores();
   const [form, setForm] = useState({
     id: null,
     nombre: "",
@@ -11,15 +15,7 @@ export function MotorsPage() {
     tipo: ""
   });
 
-  const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    const initialMotors = [
-      { id: 1, nombre: "Motor A", descripcion: "Descripción A", tipo: "Tipo A" },
-      { id: 2, nombre: "Motor B", descripcion: "Descripción B", tipo: "Tipo B" }
-    ];
-    setMotors(initialMotors);
-  }, []);
+  const [motorEditing, setMotorEditing] = useState(null);
 
   const handleFormChange = (e) => {
     setForm({
@@ -30,28 +26,60 @@ export function MotorsPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isEditing) {
-      setMotors(
-        motors.map((motor) => (motor.id === form.id ? form : motor))
-      );
+    if (motorEditing !== null) {
+      toast.promise(api.put('/api/motores', {
+        MotorId: motorEditing,
+        Nombre: form.nombre,
+        Descripcion: form.descripcion,
+        Tipo: form.tipo
+      }), {
+        loading: 'Actualizando motor',
+        success: 'Motor actualizado exitosamente',
+        error: 'Error al intentar actualizar el motor'
+      }).then((_) => {
+        setMotores(prev => prev.map(m => m.id == motorEditing ? ({
+          id: m.id,
+          nombre: form.nombre,
+          descripcion: form.descripcion,
+          tipo: form.tipo
+        }) : m))
+      }).catch(err => {
+        console.log(err);
+      })
     } else {
-      setMotors([...motors, { ...form, id: motors.length + 1 }]);
+      toast.promise(api.post('/api/motores', {
+        Nombre: form.nombre,
+        Descripcion: form.descripcion,
+        Tipo: form.tipo
+      }), {
+        loading: 'Guardando motor',
+        success: 'Motor creado exitosamente',
+        error: 'Error al intentar crear el motor'
+      }).then((res) => {
+        setMotores(prev => prev.concat(res.data))
+      }).catch(err => {
+        console.log(err);
+      })
     }
     resetForm();
   };
 
   const handleEdit = (motor) => {
     setForm(motor);
-    setIsEditing(true);
+    setMotorEditing(motor.id);
   };
 
   const handleDelete = (id) => {
-    setMotors(motors.filter((motor) => motor.id !== id));
+    toast.promise(api.delete(`/api/motores/${id}`), {
+      loading: 'Eliminando motor',
+      success: 'Motor eliminado correctamente',
+      error: 'Error al intentar eliminar el motor'
+    }).then((res) => {
+      setMotores(prev => prev.filter(m => m.id != id))
+    }).catch(err => {
+      console.log(err);
+    })
   };
-
-  const handleShow = (id) => {
-    redirect(`/${id}`)
-  }
 
   const resetForm = () => {
     setForm({
@@ -60,7 +88,7 @@ export function MotorsPage() {
       descripcion: "",
       tipo: ""
     });
-    setIsEditing(false);
+    setMotorEditing(null);
   };
 
   return (
@@ -98,8 +126,8 @@ export function MotorsPage() {
             required
           />
         </div>
-        <button type="submit">{isEditing ? "Actualizar" : "Agregar"} Motor</button>
-        {isEditing && <button type="button" onClick={resetForm}>Cancelar</button>}
+        <button type="submit">{motorEditing !== null ? "Actualizar" : "Agregar"} Motor</button>
+        {motorEditing !== null && <button type="button" onClick={resetForm}>Cancelar</button>}
       </form>
 
       <div className="motor-table--container">
@@ -113,8 +141,10 @@ export function MotorsPage() {
             </tr>
           </thead>
           <tbody>
-            {motors.map((motor) => (
-              <tr key={motor.id}>
+            {motores.map((motor) => (
+              <tr key={motor.id} className={clsx({
+                'motor--editing': motorEditing == motor.id
+              })}>
                 <td>{motor.nombre}</td>
                 <td>{motor.descripcion}</td>
                 <td>{motor.tipo}</td>

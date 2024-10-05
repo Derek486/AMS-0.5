@@ -4,6 +4,7 @@ import authRoutes from './routes/auth.routes'
 import motorRoutes from './routes/motor.routes'
 import './index.css'
 import './utilities.css'
+import { ToastLayout } from './layouts/ToastLayout'
 
 const rootRouter = createBrowserRouter([
   {
@@ -17,5 +18,7 @@ const rootRouter = createBrowserRouter([
 ])
 
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={rootRouter}></RouterProvider>
+  <ToastLayout>
+    <RouterProvider router={rootRouter}></RouterProvider>
+  </ToastLayout>
 )
