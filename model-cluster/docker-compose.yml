@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  fastapi-app:
+    build: 
+      context: .
+    environment:
+      KAFKA_HOST: "192.168.0.6:9092"
+      KAFKA_TOPIC: "vibration-topic"
+    ports:
+      - "8000:8000"
