@@ -1,0 +1,122 @@
+.crud-container {
+  width: 450px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.motor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.motor-form label {
+  font-weight: bold;
+  text-align: start;
+  flex-basis: 33%;
+}
+
+.motor-form div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.motor-form input {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  flex: 1 1 0;
+}
+
+.motor-form .action,
+.motor-form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.motor-form button:hover {
+  background-color: #0056b3;
+}
+
+.motor-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.motor-table--container {
+  flex: 1 1 0%;
+  overflow: auto;
+}
+
+.motor-table th, .motor-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.motor-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.motor-table td {
+  background-color: #f4f4f4;
+}
+
+.motor-table .action {
+  margin-right: 5px;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.motor-table .action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.motor-table .action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.td--actions {
+  display: flex;
+}
+
+.action--success {
+  background-color: green;
+}
+
+.action--success:hover {
+  background-color: rgb(0, 106, 0);
+}
+
+.action--wrong {
+  background-color: rgb(191, 26, 26);
+}
+
+.action--wrong:hover {
+  background-color: rgb(135, 17, 17);
+}
+
+.action--neutral {
+  background-color: #007bff;
+}
+
+.action--neutral:hover {
+  background-color: #0062cb;
+}
