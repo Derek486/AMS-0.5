@@ -5,6 +5,7 @@ import motorRoutes from './routes/motor.routes'
 import './index.css'
 import './utilities.css'
 import { ToastLayout } from './layouts/ToastLayout'
+import { WebsocketsProvider } from './context/Websockets'
 
 const rootRouter = createBrowserRouter([
   {
@@ -19,6 +20,8 @@ const rootRouter = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <ToastLayout>
-    <RouterProvider router={rootRouter}></RouterProvider>
+    <WebsocketsProvider>
+      <RouterProvider router={rootRouter}></RouterProvider>
+    </WebsocketsProvider>
   </ToastLayout>
 )

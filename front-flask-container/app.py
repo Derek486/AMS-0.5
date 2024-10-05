@@ -57,6 +57,7 @@ def start_sending(type, motor_id):
                     }
                     print(message)
                     send_to_kafka(KAFKA_BROKER, KAFKA_TOPIC, message)
+                    time.sleep(1)
                 else:
                     break
 
