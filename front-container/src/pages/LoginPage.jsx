@@ -1,11 +1,14 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useForm from "../hooks/useForm";
-import './FormStyles.css'
-import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import toast from "react-hot-toast";
+import AuthLayout from "../layouts/AuthLayout";
+import IconComponent from "../components/IconComponent";
+import { Input } from "@material-tailwind/react";
 
 export function LoginPage() {
+  const [passwordVisible, setPasswordVisible] = useState(false)
   const [form, handleForm] = useForm();
   const navigate = useNavigate()
 
@@ -35,44 +38,48 @@ export function LoginPage() {
   }
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <div className="form-header">
-        <h1>Login Page</h1>
-      </div>
-      <div className="form-body">
-        <section className="form-section">
-          <div className="input-group">
-            <label htmlFor="input_email">Email</label>
-            <input
-              id="input_email"
+    <AuthLayout 
+      title="Login page" 
+      buttonText="Login" 
+      link="/auth/register" 
+      linkText="Register here" 
+      onSubmit={handleSubmit}
+      footerText="Don't have an account?"
+    >
+      <>
+        <div className="flex flex-col gap-4">
+          <section>
+            <Input 
+              variant="standard" 
+              label="Email" 
               type="email"
-              value={form.email || ""}
               name="email"
-              onInput={handleForm}
-              className="form-input"
+              value={form.email || ''} 
+              onChange={handleForm}
+              color="black"
               required
             />
-          </div>
-          <div className="input-group">
-            <label htmlFor="input_password">Password</label>
-            <input
-              id="input_password"
-              type="password"
-              value={form.password || ""}
+          </section>
+          <section>
+            <Input 
+              variant="standard" 
+              label="Password" 
+              type={passwordVisible ? 'text' : 'password'}
               name="password"
-              onInput={handleForm}
-              className="form-input"
+              value={form.password || ''} 
+              onChange={handleForm}
+              color="black"
+              icon={
+                <IconComponent 
+                  onClick={() => setPasswordVisible(prev => !prev)} 
+                  icon={passwordVisible ? 'eye-slash' : 'eye'}
+                />
+              }
               required
             />
-          </div>
-        </section>
-      </div>
-      <footer className="form-footer">
-        <button className="form-button" type="submit">
-          Login
-        </button>
-        <p>Don't have an account? <Link to="/auth/register">Register here</Link></p>
-      </footer>
-    </form>
+          </section>
+        </div>
+      </>
+    </AuthLayout>
   );
 }

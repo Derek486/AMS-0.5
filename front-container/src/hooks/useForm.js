@@ -2,11 +2,17 @@ import { useState } from "react";
 
 export default function useForm(initial) {
   const [form, setForm] = useState(initial || {})
-  const handleForm = (e) => {
+  const handleForm = ({ target }) => {
     setForm(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [target.name]: target.value
     }))
   }
-  return [form, handleForm]
+  const resetForm = () => {
+    setForm(initial || {})
+  }
+  const clearForm = () => {
+    setForm({})
+  }
+  return [form, handleForm, clearForm, resetForm]
 }

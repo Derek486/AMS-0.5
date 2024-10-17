@@ -1,4 +1,3 @@
-import math
 from fastapi import FastAPI
 from dotenv import load_dotenv
 from persistence.websockets import websocket_endpoint

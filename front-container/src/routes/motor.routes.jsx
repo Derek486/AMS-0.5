@@ -6,10 +6,6 @@ const routes = [
     path: '',
     element: <MotorsPage />
   },
-  {
-    path: ':id',
-    element: <MotorPage />
-  }
 ]
 
 export default routes

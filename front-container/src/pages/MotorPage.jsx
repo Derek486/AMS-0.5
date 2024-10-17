@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import './MotorStyles.css'
 import toast from "react-hot-toast";
 import api from "../api";
 

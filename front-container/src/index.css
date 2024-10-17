@@ -1,14 +1,35 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root input {
+  --color-input-autofill: rgb(69 90 100 / var(--tw-text-opacity));
+}
+
+:root .dark input {
+  --color-input-autofill: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter/Inter-VariableFont_slnt\,wght.ttf") format("truetype-variations");
 }
 
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f0f2f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: 'Inter', 'Arial';
+}
+
+#root {
+  @apply flex h-screen
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: var(--color-input-autofill);
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #ffffff00;
 }

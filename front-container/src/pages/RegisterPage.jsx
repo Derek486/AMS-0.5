@@ -1,11 +1,14 @@
-import { useCallback } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useForm from "../hooks/useForm";
 import api from "../api";
 import toast from "react-hot-toast";
-import './FormStyles.css';
+import AuthLayout from "../layouts/AuthLayout";
+import { Input } from "@material-tailwind/react";
+import IconComponent from "../components/IconComponent";
 
 export function RegisterPage() {
+  const [passwordVisible, setPasswordVisible] = useState(false)
   const [form, handleForm] = useForm();
   const navigate = useNavigate()
 
@@ -34,70 +37,80 @@ export function RegisterPage() {
   }
 
   return (
-    <form className="form-container" onSubmit={handleSubmit}>
-      <div className="form-header">
-        <h1>Register Page</h1>
-      </div>
-      <div className="form-body">
-        <section className="form-section">
-          <div className="form-section--row">
-            <div className="input-group">
-              <label htmlFor="input_nombre">Nombre</label>
-              <input
-                id="input_nombre"
+    <AuthLayout 
+      title="Register page" 
+      buttonText="Register" 
+      link="/auth/login" 
+      linkText="Login here" 
+      onSubmit={handleSubmit}
+      footerText="Already have an account?"
+    >
+      <>
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4 max-w-72">
+            <section>
+              <Input 
+                variant="standard" 
+                label="First name"
                 type="text"
-                value={form.nombre || ""}
                 name="nombre"
-                onInput={handleForm}
-                className="form-input"
+                value={form.nombre || ''} 
+                onChange={handleForm}
+                color="black"
+                containerProps={{
+                  className: '!min-w-0'
+                }}
                 required
               />
-            </div>
-            <div className="input-group">
-              <label htmlFor="input_apellidos">Apellidos</label>
-              <input
-                id="input_apellidos"
+            </section>
+            <section>
+              <Input 
+                variant="standard" 
+                label="Last name" 
                 type="text"
-                value={form.apellidos || ""}
                 name="apellidos"
-                onInput={handleForm}
-                className="form-input"
+                value={form.apellidos || ''} 
+                onChange={handleForm}
+                color="black"
+                containerProps={{
+                  className: '!min-w-0'
+                }}
                 required
               />
-            </div>
+            </section>
           </div>
-          <div className="input-group">
-            <label htmlFor="input_email">Email</label>
-            <input
-              id="input_email"
+          <section>
+            <Input 
+              variant="standard" 
+              label="Email" 
               type="email"
-              value={form.email || ""}
               name="email"
-              onInput={handleForm}
-              className="form-input"
+              value={form.email || ''} 
+              onChange={handleForm}
+              color="black"
               required
             />
-          </div>
-          <div className="input-group">
-            <label htmlFor="input_password">Password</label>
-            <input
-              id="input_password"
-              type="password"
-              value={form.password || ""}
+          </section>
+          <section>
+            <Input 
+              variant="standard" 
+              label="Password" 
+              type={passwordVisible ? 'text' : 'password'}
               name="password"
-              onInput={handleForm}
-              className="form-input"
+              value={form.password || ''} 
+              onChange={handleForm}
+              color="black"
+              icon={
+                <IconComponent 
+                  onClick={() => setPasswordVisible(prev => !prev)} 
+                  icon={passwordVisible ? 'eye-slash' : 'eye'}
+                />
+              }
               required
             />
-          </div>
-        </section>
-      </div>
-      <footer className="form-footer">
-        <button className="form-button" type="submit">
-          Register
-        </button>
-        <p>Already have an account? <Link to="/auth/login">Login here</Link></p>
-      </footer>
-    </form>
+          </section>
+        </div>
+      </>
+    </AuthLayout>
   );
 }

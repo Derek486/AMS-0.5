@@ -2,10 +2,9 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import authRoutes from './routes/auth.routes'
 import motorRoutes from './routes/motor.routes'
-import './index.css'
-import './utilities.css'
 import { ToastLayout } from './layouts/ToastLayout'
 import { WebsocketsProvider } from './context/Websockets'
+import './index.css'
 
 const rootRouter = createBrowserRouter([
   {
