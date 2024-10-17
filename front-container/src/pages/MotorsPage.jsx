@@ -3,10 +3,11 @@ import useMotores from "../hooks/useMotores";
 import IconComponent from "../components/IconComponent";
 import FormMotor from "../components/FormMotor";
 import TableHeader from "../components/TableHeader";
-import TableCell from "../components/TableCell.jsx";
-import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, IconButton, Switch, Tooltip } from "@material-tailwind/react";
+import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, Switch } from "@material-tailwind/react";
 import toast from "react-hot-toast";
 import api from "../api.js";
+import TableRowMotor from "../components/TableRowMotor.jsx";
+import clsx from "clsx";
 
 export function MotorsPage() {
   const { motores, setMotores } = useMotores();
@@ -54,9 +55,9 @@ export function MotorsPage() {
         <DialogHeader>
           <p className="font-inter text-lg text-center mx-auto">Confirm Deletion</p>
         </DialogHeader>
-        <DialogBody className="p-0 flex justify-center font-inter text-base font-semibold text-center flex-col gap-2 px-4">
+        <DialogBody className="p-0 flex justify-center font-inter text-base font-medium text-center flex-col gap-2 px-4">
           <p>Are you sure you want to delete Motor ID ({dialogState.motorDeleting?.id})?</p>
-          <p>This action cannot be undone</p>
+          <p className="font-bold">This action cannot be undone</p>
         </DialogBody>
         <DialogFooter>
           <div className="flex gap-4 justify-center mx-auto">
@@ -70,55 +71,42 @@ export function MotorsPage() {
         </DialogFooter>
       </Dialog>
 
-      <div className="bg-smoke flex flex-col w-full h-full">
-        <header className="flex justify-between p-4 bg-obsidian">
+      <div className="bg-smoke flex flex-col w-full h-full overflow-auto">
+        <header className="flex justify-between p-4 bg-obsidian top-0 w-full">
           <div className="flex items-center gap-2">
             <IconComponent className="text-white w-8 h-8" viewBox="0 0 24 24" icon="motor" />
             <h1 className="text-white">Motor <strong className="text-light-sky">Manager</strong></h1>
           </div>
           <div className="flex items-center justify-center gap-2 text-white">
-            <Switch defaultChecked className="checked:bg-sky checked:bg-opacity-100 bg-smoke bg-opacity-80" onChange={() => setMetricsMode(!metricsMode)} label="Edit mode" labelProps={{className: 'text-white'}} />
+            <Switch className="checked:bg-sky checked:bg-opacity-100 bg-smoke bg-opacity-80" onChange={() => setMetricsMode(!metricsMode)} label="Metrics mode" labelProps={{className: 'text-white'}} />
           </div>
         </header>
-        <div className="flex gap-4 p-4 justify-center flex-1 h-0">
-          <FormMotor setMotores={setMotores} />
-          <article  className="bg-light-smoke dark:bg-midnight shadow-md rounded-md flex flex-col gap-4 w-[720px] overflow-auto h-max max-h-full">
-            <table className="min-w-full shadow-sm rounded-lg">
-              <thead>
-                <tr>
-                  <TableHeader>ID</TableHeader>
-                  <TableHeader>Motor name</TableHeader>
-                  <TableHeader>Description</TableHeader>
-                  <TableHeader>Motor type</TableHeader>
-                  <TableHeader>Actions</TableHeader>
-                </tr>
-              </thead>
-              <tbody>
+        <div className="flex flex-col md:flex-row gap-4 p-4 justify-center md:flex-1 md:h-0">
+          <section className="sm:mx-auto sm:w-96 md:w-auto md:m-0">
+            <FormMotor setMotores={setMotores} />
+          </section>
+          <section  className={clsx(["dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-[420px] md:h-max md:max-h-full", { 'shadow-md': !metricsMode }])}>
+            <div className="shadow-sm rounded-lg w-[720px]">
+              <header className="flex w-full">
+                <TableHeader className="max-w-24">ID</TableHeader>
+                <TableHeader className="max-w-64">Motor name</TableHeader>
+                <TableHeader className="max-w-64">Description</TableHeader>
+                <TableHeader className="max-w-64">Motor type</TableHeader>
+                <TableHeader className="max-w-64 text-center">{metricsMode ? 'Metric charts' : 'Actions'}</TableHeader>
+              </header>
+              <div className="flex flex-col">
                 {motores.map((motor) => (
-                  <tr key={motor.id} className="even:bg-smoke">
-                    <TableCell>{motor.id}</TableCell>
-                    <TableCell>{motor.nombre}</TableCell>
-                    <TableCell>{motor.descripcion}</TableCell>
-                    <TableCell>{motor.tipo}</TableCell>
-                    <TableCell>
-                      <>
-                        <Tooltip content="Edit">
-                          <IconButton onClick={() => handleEdit(motor)} variant="text" className="rounded-full">
-                            <IconComponent icon="pencil" className="w-5 h-5 text-sky" />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip content="Delete">
-                          <IconButton onClick={() => handleDelete(motor)} variant="text" className="rounded-full" color="red">
-                            <IconComponent icon="trash" className="w-5 h-5 text-red-400" />
-                          </IconButton>
-                        </Tooltip>
-                      </>
-                    </TableCell>
-                  </tr>
+                  <TableRowMotor 
+                    key={motor.id}
+                    motor={motor} 
+                    handleDelete={handleDelete} 
+                    handleEdit={handleEdit} 
+                    metricsMode={metricsMode}
+                  />
                 ))}
-              </tbody>
-            </table>
-          </article>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </>
