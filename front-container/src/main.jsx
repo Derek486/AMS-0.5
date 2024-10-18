@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom'
 import authRoutes from './routes/auth.routes'
 import motorRoutes from './routes/motor.routes'
 import { ToastLayout } from './layouts/ToastLayout'
@@ -14,7 +14,7 @@ const rootRouter = createBrowserRouter([
   {
     path: '/',
     children: motorRoutes
-  }
+  },
 ])
 
 createRoot(document.getElementById('root')).render(

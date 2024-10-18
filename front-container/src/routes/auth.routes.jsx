@@ -18,7 +18,7 @@ const routes = [
     element: <RegisterPage />,
   },
   {
-    path: '**',
+    path: '*',
     loader: () => {
       return redirect('login')
     }

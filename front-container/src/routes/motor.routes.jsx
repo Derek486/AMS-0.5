@@ -1,11 +1,17 @@
 import { MotorsPage } from "../pages/MotorsPage";
-import { MotorPage } from "../pages/MotorPage";
+import { redirect } from "react-router-dom";
 
 const routes = [
   {
     path: '',
     element: <MotorsPage />
   },
+  {
+    path: '*',
+    loader: () => {
+      return redirect('')
+    }
+  }
 ]
 
 export default routes

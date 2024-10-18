@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import api from "../api.js";
 import TableRowMotor from "../components/TableRowMotor.jsx";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 
 export function MotorsPage() {
   const { motores, setMotores } = useMotores();
@@ -77,8 +78,12 @@ export function MotorsPage() {
             <IconComponent className="text-white w-8 h-8" viewBox="0 0 24 24" icon="motor" />
             <h1 className="text-white">Motor <strong className="text-light-sky">Manager</strong></h1>
           </div>
-          <div className="flex items-center justify-center gap-2 text-white">
-            <Switch className="checked:bg-sky checked:bg-opacity-100 bg-smoke bg-opacity-80" onChange={() => setMetricsMode(!metricsMode)} label="Metrics mode" labelProps={{className: 'text-white'}} />
+          <div className="flex items-center justify-center gap-4">
+            <Switch className="checked:bg-sky checked:bg-opacity-100 bg-smoke bg-opacity-80" onChange={() => setMetricsMode(!metricsMode)} label={<i class="text-white font-normal"><span class="text-light-sky">Metrics</span> mode</i>} labelProps={{className: 'text-white'}} />
+            <span className="border-[1px] border-white h-full rounded-full"></span>
+            <a href="/testing">
+              <i className="text-white">Go test &gt; </i>
+            </a>
           </div>
         </header>
         <div className="flex flex-col md:flex-row gap-4 p-4 justify-center md:flex-1 md:h-0">
