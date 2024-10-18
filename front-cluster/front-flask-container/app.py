@@ -78,14 +78,14 @@ def stop_measurement(measurement_type):
 # Ruta para obtener los motores desde el endpoint
 @app.route('/get_motors')
 def get_motors():
-    response = requests.get(MOTORES_API_URL)
+    response = requests.get(f'{MOTORES_API_URL}/api/motores')
     if response.status_code == 200:
         return jsonify(response.json())
     return 'Error al obtener motores', 500
 
 @app.route('/testing')
 def index():
-    response = requests.get(MOTORES_API_URL)
+    response = requests.get(f'{MOTORES_API_URL}/api/motores')
     return render_template('index.html', motors=response.json())
 
 # Iniciar el servidor Flask
