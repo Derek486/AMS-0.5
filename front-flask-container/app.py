@@ -83,9 +83,10 @@ def get_motors():
         return jsonify(response.json())
     return 'Error al obtener motores', 500
 
-@app.route('/')
+@app.route('/testing')
 def index():
-    return render_template('index.html')
+    response = requests.get(MOTORES_API_URL)
+    return render_template('index.html', motors=response.json())
 
 # Iniciar el servidor Flask
 if __name__ == '__main__':
