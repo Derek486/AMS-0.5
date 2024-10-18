@@ -35,12 +35,8 @@ Para iniciar este **Front Cluster**, es necesario ejecutar el archivo `docker-co
 ### Para la Aplicación de Envío de Datos (Flask):
 - **`KAFKA_BROKER`**: Indica el host donde estará alojado el broker de Kafka, para enviar los datos de prueba que serán analizados por el modelo.
 
-    --- 
-
 > [!IMPORTANT]  
 > Para garantizar una comunicación adecuada, asegúrate de que el valor de esta variable coincida con el que se utilizó para configurar el clúster de Kafka, específicamente en la variable `KAFKA_ADVERTISED_LISTENERS` (el host y el puerto).
-
-    --- 
 
 - **`KAFKA_TOPIC`**: Define el tópico en el que se enviarán los datos. Este puede variar según la conveniencia del equipo de desarrollo.
 - **`MOTORES_API_URL`**: Al igual que en la primera aplicación, esta variable indica la URL donde estará alojado el worker de C# para ejecutar las operaciones de lectura. No debe incluir una ruta específica, solo el host (puede compartirse con la variable de la primera aplicación).
