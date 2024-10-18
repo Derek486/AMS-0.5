@@ -16,6 +16,8 @@ services:
       context: ./front-container
       args:
         - VITE_API_URL=${MOTORES_API_URL}
+    volumes:
+      - ./front-container/nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
       - VITE_API_URL=${MOTORES_API_URL}
 
