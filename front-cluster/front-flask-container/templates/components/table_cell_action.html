@@ -1,7 +1,12 @@
 <div class="{{ 'px-6 py-4 text-sm whitespace-nowrap text-midnight font-normal truncate flex-1 flex items-center' }} {{ className }}">
     <div class="inline-flex items-center">
         <div class="relative inline-block w-8 h-4 cursor-pointer rounded-full">
-            <input id=":r{{ motor.id }}:{{ icon }}" type="checkbox" class="peer appearance-none w-8 h-4 absolute rounded-full cursor-pointer transition-colors duration-300 peer-checked:border-gray-900 peer-checked:before:bg-gray-900 checked:bg-sky checked:bg-opacity-100 bg-light-sky bg-opacity-60" />
+            <input 
+                id=":r{{ motor.id }}:{{ icon }}" 
+                onchange="toggleSending('{{ motor.id }}', '{{ icon }}')"
+                type="checkbox" 
+                class="peer appearance-none w-8 h-4 absolute rounded-full cursor-pointer transition-colors duration-300 peer-checked:border-gray-900 peer-checked:before:bg-gray-900 checked:bg-sky checked:bg-opacity-100 bg-light-sky bg-opacity-60" 
+            />
             <label for=":r{{ motor.id }}:{{ icon }}" class="bg-smoke w-5 h-5 border border-sky rounded-full shadow-md absolute top-2/4 -left-1 -translate-y-2/4 peer-checked:translate-x-full transition-all duration-300 cursor-pointer before:content[''] before:block before:bg-blue-gray-500 before:w-10 before:h-10 before:rounded-full before:absolute before:top-2/4 before:left-2/4 before:-translate-y-2/4 before:-translate-x-2/4 before:transition-opacity before:opacity-0 hover:before:opacity-10 peer-checked:border-gray-900 peer-checked:before:bg-gray-900">
                 <div class="inline-block top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 p-5 rounded-full">
                 </div>
@@ -9,12 +14,12 @@
         </div>
         <label class="font-light select-none cursor-pointer mt-px ml-3 mb-0 text-obsidian" for=":r{{ motor.id }}:{{ icon }}">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 fill-sky" viewBox="0 0 16 16">
-                {% if icon == 'a' %}
+                {% if icon == 'acceleration' %}
                     <path fill-rule="evenodd" d="M6 2a.5.5 0 0 1 .47.33L10 12.036l1.53-4.208A.5.5 0 0 1 12 7.5h3.5a.5.5 0 0 1 0 1h-3.15l-1.88 5.17a.5.5 0 0 1-.94 0L6 3.964 4.47 8.171A.5.5 0 0 1 4 8.5H.5a.5.5 0 0 1 0-1h3.15l1.88-5.17A.5.5 0 0 1 6 2"/>
-                {% elif icon == 'v' %}
+                {% elif icon == 'velocity' %}
                     <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415"/>
                     <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1"/>,
-                {% elif icon == 't' %}
+                {% elif icon == 'temperature' %}
                     <path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
                 {% endif %}
             </svg>

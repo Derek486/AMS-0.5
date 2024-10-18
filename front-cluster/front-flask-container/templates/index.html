@@ -57,13 +57,13 @@
                                         {% include 'components/table_cell.html' %}
                                     {% endwith %}
                                     <div class="flex gap-2 w-72 flex-1">
-                                        {% with motor=motor,className='justify-center',icon='a' %}
+                                        {% with motor=motor,className='justify-center',icon='acceleration' %}
                                             {% include 'components/table_cell_action.html' %}
                                         {% endwith %}
-                                        {% with motor=motor,className='justify-center',icon='v'%}
+                                        {% with motor=motor,className='justify-center',icon='velocity'%}
                                             {% include 'components/table_cell_action.html' %}
                                         {% endwith %}
-                                        {% with motor=motor,className='justify-center',icon='t'%}
+                                        {% with motor=motor,className='justify-center',icon='temperature'%}
                                             {% include 'components/table_cell_action.html' %}
                                         {% endwith %}
                                     </div>
@@ -76,17 +76,6 @@
         </div>
     </div>
 
-    <!-- <label for="motorSelect">Seleccionar Motor:</label>
-    <select id="motorSelect">
-        
-    </select>
-
-    <br><br>
-
-    <button id="accelerationButton" onclick="toggleSending('acceleration')">Aceleración</button>
-    <button id="temperatureButton" onclick="toggleSending('temperature')">Temperatura</button>
-    <button id="velocityButton" onclick="toggleSending('velocity')">Velocidad</button> -->
-
     <script>
 
         let sending = {
@@ -95,8 +84,7 @@
             'velocity': false
         };
 
-        function toggleSending(type) {
-            const motorId = document.getElementById('motorSelect').value;
+        function toggleSending(motorId, type) {
             if (motorId) {
                 sending[type] = !sending[type];
                 if (sending[type]) {

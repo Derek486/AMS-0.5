@@ -28,3 +28,6 @@ services:
       - KAFKA_BROKER=${KAFKA_BROKER}
       - KAFKA_TOPIC=${KAFKA_TOPIC}
       - MOTORES_API_URL=${MOTORES_API_URL}
+    volumes:
+      - ./front-flask-container/templates:/usr/local/app/templates
+      - ./front-flask-container/static:/usr/local/app/static
