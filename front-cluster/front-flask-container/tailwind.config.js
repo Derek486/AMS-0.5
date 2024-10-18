@@ -7,6 +7,9 @@ module.exports = {
   darkMode: 'selector',
   theme: {
     extend: {
+      screens: {
+        'xs': '372px'
+      },
       colors: {
         'obsidian': '#0B1215',
         'midnight': '#111B22',
