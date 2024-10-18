@@ -27,6 +27,9 @@ Este **Front Cluster** contiene dos aplicaciones que trabajan en conjunto para l
 
 ## Configuración del Cluster
 
+> [!TIP]
+> Puedes crear un archivo .env en el mismo nivel de donde está el `docker-compose.yml` y conglomerar allí todas las variables.
+
 Para iniciar este **Front Cluster**, es necesario ejecutar el archivo `docker-compose.yml` y configurar las siguientes variables de entorno:
 
 ### Para la Aplicación de Administración (React):
