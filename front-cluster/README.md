@@ -37,8 +37,8 @@ Para iniciar este **Front Cluster**, es necesario ejecutar el archivo `docker-co
 
     --- 
 
-    > [!IMPORTANT]  
-    > Para garantizar una comunicación adecuada, asegúrate de que el valor de esta variable coincida con el que se utilizó para configurar el clúster de Kafka, específicamente en la variable `KAFKA_ADVERTISED_LISTENERS` (el host y el puerto).
+> [!IMPORTANT]  
+> Para garantizar una comunicación adecuada, asegúrate de que el valor de esta variable coincida con el que se utilizó para configurar el clúster de Kafka, específicamente en la variable `KAFKA_ADVERTISED_LISTENERS` (el host y el puerto).
 
     --- 
 
