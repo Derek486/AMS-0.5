@@ -47,7 +47,7 @@ Para iniciar este **Front Cluster**, es necesario ejecutar el archivo `docker-co
 
 --- 
 
-> [!IMPORTANTE]  
+> [!IMPORTANT]  
 > Verifica que los demás clusters (Kafka y backend) estén en funcionamiento y operando correctamente. Si alguno de ellos presenta problemas, podrías enfrentar dificultades al realizar operaciones o al acceder a la aplicación.
 
 --- 
