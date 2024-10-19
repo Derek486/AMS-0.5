@@ -4,7 +4,7 @@ services:
     build: 
       context: .
     environment:
-      KAFKA_HOST: "192.168.0.6:9092"
-      KAFKA_TOPIC: "vibration-topic"
+      - KAFKA_HOST=${KAFKA_HOST}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
     ports:
       - "8000:8000"
