@@ -25,7 +25,7 @@ services:
     build: 
       context: ./front-flask-container
     environment:
-      - KAFKA_BROKER=${KAFKA_BROKER}
+      - KAFKA_BROKER=${KAFKA_HOST}
       - KAFKA_TOPIC=${KAFKA_TOPIC}
       - MOTORES_API_URL=${MOTORES_API_URL}
     volumes:

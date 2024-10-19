@@ -1,7 +1,7 @@
 import os
 import threading
 import time
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, redirect
 import pandas as pd
 from producer import send_to_kafka
 from dotenv import load_dotenv
@@ -85,8 +85,20 @@ def get_motors():
 
 @app.route('/testing')
 def index():
-    response = requests.get(f'{MOTORES_API_URL}/api/motores')
-    return render_template('index.html', motors=response.json())
+    user_id = request.args.get('userId')
+    token = request.args.get('token')
+    if user_id is None or token is None:
+        return redirect("/", code=302)
+    url = f'{MOTORES_API_URL}/api/motores/{user_id}'
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return render_template('index.html', motors=response.json())
+    return redirect("/", code=302)
+
 
 # Iniciar el servidor Flask
 if __name__ == '__main__':
