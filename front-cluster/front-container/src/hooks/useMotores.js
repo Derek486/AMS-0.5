@@ -1,19 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 import api from '../api';
 
 const useMotores = () => {
   const [motores, setMotores] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate()
 
   const fetchMotores = useCallback(async () => {
-    try {
-      const response = await api.get('/api/motores');
-      setMotores(response.data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
+    const token = localStorage.getItem('token')
+    if (token !== null) {
+      const user = jwtDecode(token)
+      try {
+        const response = await api.get(`/api/motores/${user.sub}`);
+        setMotores(response.data);
+      } catch (err) {
+        navigate('auth')
+      }
+    } else {
+      navigate('auth')
     }
   }, [])
 
@@ -21,7 +26,7 @@ const useMotores = () => {
     fetchMotores();
   }, []);
 
-  return { motores, loading, error, fetchMotores, setMotores };
+  return { motores, fetchMotores, setMotores };
 };
 
 export default useMotores;

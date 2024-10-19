@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import authRoutes from './routes/auth.routes'
 import motorRoutes from './routes/motor.routes'
 import { ToastLayout } from './layouts/ToastLayout'

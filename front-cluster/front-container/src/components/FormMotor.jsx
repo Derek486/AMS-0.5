@@ -1,5 +1,6 @@
 import { Button, Input, Textarea } from "@material-tailwind/react";
 import useForm from "../hooks/useForm"
+import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
 import api from "../api";
 
@@ -34,7 +35,10 @@ export default function FormMotor({ motor, setMotores }) {
         console.log(err);
       })
     } else {
+      const token = localStorage.getItem('token')
+      const user = jwtDecode(token)
       toast.promise(api.post('/api/motores', {
+        UserId: user.sub,
         Nombre: form.nombre,
         Descripcion: form.descripcion,
         Tipo: form.tipo

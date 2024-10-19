@@ -5,9 +5,7 @@ import { RegisterPage } from '../pages/RegisterPage'
 const routes = [
   {
     path: '',
-    loader: () => {
-      return redirect('login')
-    }
+    loader: () => redirect('login')
   },
   {
     path: 'login',
@@ -19,9 +17,7 @@ const routes = [
   },
   {
     path: '*',
-    loader: () => {
-      return redirect('login')
-    }
+    loader: () => redirect('login')
   }
 ]
 
