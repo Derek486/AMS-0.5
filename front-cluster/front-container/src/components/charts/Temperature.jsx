@@ -1,55 +1,74 @@
-import { Dialog, DialogBody, DialogHeader } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts'
+import useData from "../../hooks/useData";
+import { useEffect, useState } from 'react';
 
-export default function Temperature({ motor, metricsMode, metricOpen, handlerOpen }) {
-  const options = {
-    series: [{
-      name: "Temperature",
-      data: [12, 34, 22, 45, 30, 60, 75, 85, 100]
-    }],
-    options: {
-      chart: {
-        height: 350,
-        type: 'line',
-        zoom: {
-          enabled: false
-        },
-        toolbar: {
-          tools: {
-            download: false
-          }
-        }
-      },
-      dataLabels: {
-        enabled: false
-      },
-      stroke: {
-        curve: 'straight'
-      },
-      grid: {
-        row: {
-          colors: ['#f3f3f3', 'transparent'],
-          opacity: 0.5
-        },
-      },
-      xaxis: {
-        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
+export default function Temperature({ motor }) {
+  const [ data ] = useData({ type: 'temperatura', motor })
+  const [ options, setOptions ] = useState({
+    series: [
+      {
+        name: "Temperatura",
+        data: []
+      }
+    ],
+    chart: {
+      height: 350,
+      type: "line"
+    },
+    stroke: {
+      width: 7,
+      curve: "smooth"
+    },
+    xaxis: {
+      type: "datetime",
+      categories: []
+    },
+    fill: {
+      type: "gradient",
+      gradient: {
+        shade: "dark",
+        type: "horizontal",
+        shadeIntensity: 1,
+        gradientToColors: ["#00FF00", "#FFA500", "#FF0000"],
+        stops: [0, 50, 100]
       }
     },
-  };
+    markers: {
+      size: 0
+    },
+    yaxis: {
+      min: -10,
+      max: 40,
+      decimalsInFloat: 3,
+      title: {
+        text: "Temperatura"
+      }
+    },
+  })
+
+  useEffect(() => {
+    const newData = data.map(({ value, timestamp }) => {
+      return {
+        x: new Date(timestamp).getTime(),
+        y: value,
+      };
+    });
+    console.log(newData);
+    
+    setOptions(prev => ({
+      ...prev,
+      series: [
+        {
+          name: "Temperatura",
+          data: newData
+        }
+      ],
+    }))
+  }, [data])
 
   return (
     <>
-      {metricsMode ? (
-        <Dialog open={metricOpen} className="!min-w-0 !w-auto" handler={handlerOpen}>
-          <DialogHeader>
-            <p className="font-inter text-lg text-center mx-auto">Temperature timeline</p>
-          </DialogHeader>
-          <DialogBody>
-            <ReactApexChart options={options.options} series={options.series} type="area" height={350} />
-          </DialogBody>
-        </Dialog>
-      ) : null}
+      <ReactApexChart options={options} series={options.series} type="area" height={350} />
     </>
   )
 }

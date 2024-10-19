@@ -7,6 +7,7 @@ import Acceleration from "./charts/Acceleration.jsx"
 import Velocity from "./charts/Velocity.jsx"
 import Temperature from "./charts/Temperature.jsx"
 import TableHeader from "./TableHeader.jsx"
+import ChartDialog from "./charts/ChartDialog.jsx"
 
 export default function TableRowMotor({ motor, handleEdit, handleDelete, metricsMode }) {
   const [metricOpen, setMetricOpen] = useState(null)
@@ -19,9 +20,15 @@ export default function TableRowMotor({ motor, handleEdit, handleDelete, metrics
         </Drawer>
       ) : null}
 
-      <Acceleration motor={motor} handlerOpen={() => setMetricOpen(null)} metricOpen={metricOpen === 0} metricsMode={metricsMode} />
-      <Velocity motor={motor} handlerOpen={() => setMetricOpen(null)} metricOpen={metricOpen === 1} metricsMode={metricsMode}  />
-      <Temperature motor={motor} handlerOpen={() => setMetricOpen(null)} metricOpen={metricOpen === 2} metricsMode={metricsMode}  />
+      <ChartDialog title={"Acceleration RMS"} handlerOpen={() => setMetricOpen(null)} metricOpen={metricOpen === 0} metricsMode={metricsMode}>
+        {metricOpen === 0 ? (<Acceleration motor={motor} />) : <></>}
+      </ChartDialog>
+      <ChartDialog title={"Vibration timeline"} handlerOpen={() => setMetricOpen(null)} metricOpen={metricOpen === 1} metricsMode={metricsMode}>
+        {metricOpen === 1 ? (<Velocity motor={motor} />) : <></>}
+      </ChartDialog>
+      <ChartDialog title={"Temperature timeline"} handlerOpen={() => setMetricOpen(null)} metricOpen={metricOpen === 2} metricsMode={metricsMode}>
+        {metricOpen === 2 ? (<Temperature motor={motor} />) : <></>}
+      </ChartDialog>
 
       <Accordion open={metricsMode} className={clsx(["w-full", {'odd:bg-light-smoke': !metricsMode}])}>
         <header className={clsx(["flex w-full", { 'bg-light-smoke': metricsMode }])}>

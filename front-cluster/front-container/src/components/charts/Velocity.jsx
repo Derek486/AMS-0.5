@@ -1,55 +1,53 @@
-import { Dialog, DialogBody, DialogHeader } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts'
+import useData from "../../hooks/useData";
+import { useEffect, useState } from 'react';
 
-export default function Velocity({ motor, metricsMode, metricOpen, handlerOpen }) {
-  const options = {
-    series: [{
-      name: "Velocity",
-      data: [12, 34, 22, 45, 30, 60, 75, 85, 100]
-    }],
-    options: {
-      chart: {
-        height: 350,
-        type: 'line',
-        zoom: {
-          enabled: false
-        },
-        toolbar: {
-          tools: {
-            download: false
-          }
-        }
+export default function Velocity({ motor }) {
+  const [ data ] = useData({ type: 'velocidad', motor })
+  const [ options, setOptions ] = useState({
+    series: [
+      {
+        name: 'X Axis',
+        data: []
       },
-      dataLabels: {
-        enabled: false
+      {
+        name: 'Y Axis',
+        data: []
       },
-      stroke: {
-        curve: 'straight'
-      },
-      grid: {
-        row: {
-          colors: ['#f3f3f3', 'transparent'],
-          opacity: 0.5
-        },
-      },
-      xaxis: {
-        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
+      {
+        name: 'Z Axis',
+        data: []
       }
+    ],
+    chart: {
+      type: "area",
+      height: 350
     },
-  };
+    xaxis: {
+      type: 'numeric'
+    },
+    yaxis: {
+      title: {
+        text: 'Magnitud'
+      },
+      decimalsInFloat: 3,
+    }
+  })
+
+  useEffect(() => {
+    const newData = data.map(({ value, timestamp }) => {
+      return {
+        x: new Date(timestamp).getTime(),
+        y: value,
+      };
+    });
+    console.log(newData);
+    
+  }, [data])
 
   return (
     <>
-      {metricsMode ? (
-        <Dialog open={metricOpen} className="!min-w-0 !w-auto" handler={handlerOpen}>
-          <DialogHeader>
-            <p className="font-inter text-lg text-center mx-auto">Vibration timeline</p>
-          </DialogHeader>
-          <DialogBody>
-            <ReactApexChart options={options.options} series={options.series} type="area" height={350} />
-          </DialogBody>
-        </Dialog>
-      ) : null}
+      <ReactApexChart options={options} series={options.series} type="area" height={350} />
     </>
   )
 }

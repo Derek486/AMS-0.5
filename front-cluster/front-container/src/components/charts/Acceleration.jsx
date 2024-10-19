@@ -1,7 +1,9 @@
-import { Dialog, DialogBody, DialogHeader } from "@material-tailwind/react";
 import ReactApexChart from 'react-apexcharts'
+import useData from "../../hooks/useData";
 
-export default function Acceleration({ motor, metricsMode, metricOpen, handlerOpen }) {
+export default function Acceleration({ motor }) {
+  const [ data ] = useData({ type: 'aceleracion', motor })
+
   const options = {
     series: [{
       name: "RMS",
@@ -40,16 +42,7 @@ export default function Acceleration({ motor, metricsMode, metricOpen, handlerOp
 
   return (
     <>
-      {metricsMode ? (
-        <Dialog open={metricOpen} className="!min-w-0 !w-auto" handler={handlerOpen}>
-          <DialogHeader>
-            <p className="font-inter text-lg text-center mx-auto">Acceleration RMS</p>
-          </DialogHeader>
-          <DialogBody>
-            <ReactApexChart options={options.options} series={options.series} type="area" height={350} />
-          </DialogBody>
-        </Dialog>
-      ) : null}
+      <ReactApexChart options={options.options} series={options.series} type="area" height={350} />
     </>
   )
 }
