@@ -53,7 +53,7 @@ def start_sending(type, motor_id):
                         'Value': row['value'],
                         'Medicion': row['measurement_type'],
                         'Axis': row['axis'],
-                        'MotorId': motor_id
+                        'MotorId': int(motor_id)
                     }
                     print(message)
                     send_to_kafka(KAFKA_BROKER, KAFKA_TOPIC, message)
