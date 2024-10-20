@@ -7,7 +7,7 @@ Motor Manager AMS es un sistema diseñado para gestionar y monitorear motores de
 Para clonar este repositorio, asegúrate de tener Git instalado en tu máquina. Luego, ejecuta el siguiente comando:
 
 ```bash
-git clone --recurse-submodules https://github.com/JuanJoseTCP/AMS-0.5.git testing
+git clone --recurse-submodules https://github.com/JuanJoseTCP/AMS-0.5.git
 ```
 
 ## Tabla de Contenidos
