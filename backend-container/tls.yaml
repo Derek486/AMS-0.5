@@ -1,0 +1,14 @@
+http:
+  routers:
+    http_router:
+      rule: "Host(`worker.localhost`)"
+      service: allbackend
+  services:
+    allbackend:
+      loadBalancer:   
+        servers:
+          - url: "http://worker-ams:8080/"
+tls:
+  options:
+    tlsoptions:
+      minVersion: VersionTLS12
