@@ -82,7 +82,7 @@ export function MotorsPage() {
           <div className="flex flex-col items-end justify-center sm:flex-row sm:items-center sm:gap-4">
             <Switch className="checked:bg-sky checked:bg-opacity-100 bg-smoke bg-opacity-80" onChange={() => setMetricsMode(!metricsMode)} label={<i className="text-white font-normal"><span className="text-light-sky">Metrics</span> mode</i>} labelProps={{className: 'text-white'}} />
             <span className="border-[1px] border-white h-full rounded-full"></span>
-            <a href={`/testing?userId=${user?.sub}&token=${localStorage.getItem('token')}`}>
+            <a href={`/testing/${localStorage.getItem('token')}`}>
               <i className="text-white">Go test &gt; </i>
             </a>
           </div>

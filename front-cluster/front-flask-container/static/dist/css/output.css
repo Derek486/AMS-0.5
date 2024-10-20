@@ -622,12 +622,21 @@ video {
   height: 2rem;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-full {
   height: 100%;
 }
 
 .max-h-full {
   max-height: 100%;
+}
+
+.max-h-min {
+  max-height: -moz-min-content;
+  max-height: min-content;
 }
 
 .w-0 {
@@ -1070,6 +1079,10 @@ input:-webkit-autofill:active{
 }
 
 @media (min-width: 768px) {
+  .md\:h-full {
+    height: 100%;
+  }
+
   .md\:h-max {
     height: -moz-max-content;
     height: max-content;

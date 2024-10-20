@@ -27,8 +27,8 @@
                     </a>
                 </div>
             </header>
-            <div class="flex flex-col md:flex-row gap-4 p-4 justify-center flex-1 h-0">
-                <section  class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-full md:h-max shadow-md">
+            <div class="flex gap-4 p-4 justify-center flex-1 h-0">
+                <section  class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-min shadow-md">
                     <div class="shadow-sm rounded-lg w-[920px]">
                         <header class="flex w-full">
                             {% with content='ID',className='max-w-24' %}
@@ -57,13 +57,13 @@
                                         {% include 'components/table_cell.html' %}
                                     {% endwith %}
                                     <div class="flex gap-2 w-72 flex-1">
-                                        {% with motor=motor,className='justify-center',icon='acceleration' %}
+                                        {% with motor=motor,className='justify-center',icon='acceleration',metrics=metrics %}
                                             {% include 'components/table_cell_action.html' %}
                                         {% endwith %}
-                                        {% with motor=motor,className='justify-center',icon='velocity'%}
+                                        {% with motor=motor,className='justify-center',icon='velocity',metrics=metrics %}
                                             {% include 'components/table_cell_action.html' %}
                                         {% endwith %}
-                                        {% with motor=motor,className='justify-center',icon='temperature'%}
+                                        {% with motor=motor,className='justify-center',icon='temperature',metrics=metrics %}
                                             {% include 'components/table_cell_action.html' %}
                                         {% endwith %}
                                     </div>
@@ -76,26 +76,7 @@
         </div>
     </div>
 
-    <script>
-
-        let sending = {
-            'acceleration': false,
-            'temperature': false,
-            'velocity': false
-        };
-
-        function toggleSending(motorId, type) {
-            if (motorId) {
-                sending[type] = !sending[type];
-                if (sending[type]) {
-                    fetch(`/start_sending/${type}/${motorId}`);
-                } else {
-                    fetch(`/stop_sending/${type}`);
-                }
-            } else {
-                alert('Por favor selecciona un motor.');
-            }
-        }
-    </script>
+    <script src="/static/dist/js/socket.io.min.js"></script>
+    <script src="/static/dist/js/metrics.js"></script>
 </body>
 </html>
