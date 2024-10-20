@@ -1,6 +1,0 @@
-# Static configuration
-entryPoints:
-    unsecure:
-        address: :80
-    secure:
-        address: :443
