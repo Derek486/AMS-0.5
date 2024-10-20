@@ -1,6 +1,6 @@
 # Motor Manager AMS 0.5
 
-Motor Manager AMS es un sistema diseñado para gestionar y monitorear motores industriales. Utiliza tecnologías modernas como Docker, Kafka y Flask para proporcionar una solución robusta y escalable.
+Motor Manager AMS es un sistema diseñado para gestionar y monitorear motores de rotación constante. Utiliza tecnologías modernas como Docker, Kafka y Flask para proporcionar una solución robusta y escalable.
 
 ## Tabla de Contenidos
 
