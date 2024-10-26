@@ -9,7 +9,7 @@ services:
       - '3000:80'
     depends_on:
       - app
-      - app-test
+      - app.flask
 
   app:
     build:
@@ -21,7 +21,7 @@ services:
     environment:
       - VITE_API_URL=${MOTORES_API_URL}
 
-  app-test:
+  app.flask:
     build: 
       context: ./front-flask-container
     environment:
