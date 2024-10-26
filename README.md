@@ -2,6 +2,14 @@
 
 Motor Manager AMS es un sistema diseñado para gestionar y monitorear motores de rotación constante. Utiliza tecnologías modernas como Docker, Kafka y Flask para proporcionar una solución robusta y escalable.
 
+## Clonación del Repositorio
+
+Para clonar este repositorio, asegúrate de tener Git instalado en tu máquina. Luego, ejecuta el siguiente comando:
+
+```bash
+git clone --recurse-submodules https://github.com/JuanJoseTCP/AMS-0.5.git
+```
+
 ## Tabla de Contenidos
 
 1. [Arquitectura del Proyecto](#arquitectura-del-proyecto)
