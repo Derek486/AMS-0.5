@@ -6,5 +6,6 @@ services:
     environment:
       - KAFKA_HOST=${KAFKA_HOST}
       - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - KAFKA_TOPIC_MODEL=${KAFKA_TOPIC_MODEL}
     ports:
       - "8000:8000"
