@@ -2,6 +2,11 @@ import os
 import json
 import pandas as pd
 from kafka import KafkaProducer
+import logging
+
+# Configuración de logs
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Configuración de Kafka
 KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9092')  # Asegúrate de que la IP y el puerto estén correctos
@@ -12,45 +17,35 @@ CSV_DESALINEAMIENTO_PATH = './data/Desalineamiento.csv'
 CSV_DESGASTE_PATH = './data/Desgaste_rodamiento.csv'
 CSV_FALLO_NINGUNO_PATH = './data/Fallo_Ninguno.csv'
 
-def connect_to_kafka(broker):
-    """Función para verificar la conexión inicial a Kafka."""
+def connect_to_kafka(broker, topic):
+    """Función para verificar y registrar la conexión a Kafka."""
     try:
         producer = KafkaProducer(bootstrap_servers=broker)
-        print("Conexión establecida con Kafka en:", broker)
+        logger.info(f"Conexión exitosa a Kafka en el broker {broker}, tópico {topic}.")
         producer.close()
-        return True
     except Exception as e:
-        print("Error al conectar con Kafka:", e)
-        return False
+        logger.error(f"Error al conectar con Kafka: {e}")
 
 def get_kafka_producer(broker):
     """Crea y devuelve una instancia de KafkaProducer que permanece abierta."""
-    return KafkaProducer(bootstrap_servers=broker)
-
+    return KafkaProducer(
+        bootstrap_servers=broker,
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    )
 
 def send_to_kafka_batch(producer, topic, messages):
     """Función para enviar un lote de mensajes JSON a Kafka usando un productor reutilizable."""
     for message in messages:
-        producer.send(topic, json.dumps(message).encode('utf-8'))
+        producer.send(topic, message)
     producer.flush()
-    print(f"Lote de {len(messages)} mensajes enviado al tópico {topic}")
-
-
-"""
-def send_to_kafka(broker, topic, message):
-    #Función para enviar un mensaje JSON a Kafka.
-    producer = KafkaProducer(bootstrap_servers=broker)
-    producer.send(topic, json.dumps(message).encode('utf-8'))
-    producer.flush()
-    print(f"Mensaje enviado al tópico {topic}: {message}")
-"""
+    logger.info(f"Lote de {len(messages)} mensajes enviado al tópico {topic}")
 
 def read_csv(file_path):
-    """Lee un archivo CSV en un DataFrame de pandas."""
+    """Lee un archivo CSV y devuelve un DataFrame de pandas."""
     try:
-        return pd.read_csv(file_path, sep=";")  # Aseguramos el separador correcto
+        return pd.read_csv(file_path, sep=";")
     except Exception as e:
-        print(f"Error al leer el archivo CSV {file_path}: {e}")
+        logger.error(f"Error al leer el archivo CSV {file_path}: {e}")
         return None
 
 def get_csv_file(data_type):
@@ -65,24 +60,16 @@ def get_csv_file(data_type):
     df = read_csv(file_path)
     return df
 
-def process_and_print_data_in_batches(data_type, batch_size=200):
-    """Procesa los datos y los envía a Kafka en lotes, manteniendo abierta la conexión."""
-    # Crear el productor al inicio del proceso
-    producer = get_kafka_producer(KAFKA_BROKER)
-    if not producer:
-        print("No se pudo establecer la conexión con Kafka.")
-        return
-    
-    print("Conexión exitosa. Procediendo a procesar y enviar los datos por lotes.")
-
-    # Cargar el CSV basado en el tipo de dato
+def process_data_type(data_type, batch_size=200):
+    """Procesa el tipo de dato recibido, muestra el head en los logs y envía los datos en lotes a Kafka."""
     df = get_csv_file(data_type)
     if df is not None:
-        print(f"Datos para {data_type}:")
-        print(df.head())  # Imprimir las primeras filas para verificar la estructura
-
-        # Crear los mensajes y enviarlos en lotes
+        logger.info(f"Head de datos para {data_type}:\n{df.head()}")
+        
+        # Crear el productor y enviar los datos en lotes
+        producer = get_kafka_producer(KAFKA_BROKER)
         messages = []
+
         for index, row in df.iterrows():
             message = {
                 'Timestamp': row['Timestamp'],
@@ -92,21 +79,18 @@ def process_and_print_data_in_batches(data_type, batch_size=200):
                 'data_type': data_type
             }
             messages.append(message)
-            
+
             # Enviar el lote cuando alcanza el tamaño especificado
             if len(messages) == batch_size:
                 send_to_kafka_batch(producer, KAFKA_TOPIC_MODEL, messages)
                 messages = []  # Reiniciar el lote
 
-        # Enviar los mensajes restantes si quedaron menos de 200
+        # Enviar los mensajes restantes si quedaron menos de batch_size
         if messages:
             send_to_kafka_batch(producer, KAFKA_TOPIC_MODEL, messages)
-            
+        
+        producer.close()
+        logger.info("Conexión cerrada después de enviar todos los datos.")
     else:
-        print(f"No se pudo cargar el archivo para {data_type}")
-    
-    # Cerrar el productor al finalizar todo el proceso
-    producer.close()
-    print("Conexión cerrada después de enviar todos los datos.")
-
+        logger.error(f"No se pudo procesar los datos para {data_type}.")
 

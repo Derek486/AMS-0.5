@@ -19,6 +19,10 @@ def procesar_datos(df):
             print("Error: Las columnas 'Estado', 'Tipo_fallo' y 'Axis' no se encuentran en el archivo.")
             return None
         
+        # Escalar las columnas 'Value' y 'Rms'
+        df[['Value', 'Rms']] = scaler.fit_transform(df[['Value', 'Rms']])
+        print("Después de la escalación de 'Value' y 'Rms':\n", df[['Value', 'Rms']].head())
+
         # Codificar las columnas 'Estado' y 'Tipo_fallo'
         df[['Estado', 'Tipo_fallo']] = encoder_estado_fallo.fit_transform(df[['Estado', 'Tipo_fallo']])
         print("Después de la codificación ordinal de 'Estado' y 'Tipo_fallo':\n", df[['Estado', 'Tipo_fallo']].head())
@@ -27,11 +31,13 @@ def procesar_datos(df):
         df['Axis'] = encoder_axis.fit_transform(df['Axis'])
         print("Después de la codificación de 'Axis':\n", df[['Axis']].head())
 
-        # Escalar las columnas 'Value' y 'Rms'
-        df[['Value', 'Rms']] = scaler.fit_transform(df[['Value', 'Rms']])
-        print("Después de la escalación de 'Value' y 'Rms':\n", df[['Value', 'Rms']].head())
+        # *** Reordenar columnas aquí ***
+        column_order = ['Value', 'Rms', 'Axis', 'Estado']  # Orden esperado por el modelo
+        df = df[column_order]
+        print("Datos reordenados para el modelo:\n", df.head())
 
         print("Datos después del preprocesamiento:\n", df.head())
+        
         return df  # Retorna el DataFrame preprocesado listo para el modelo
 
     except Exception as e:

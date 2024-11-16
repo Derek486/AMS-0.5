@@ -21,3 +21,8 @@ ENV FLASK_ENV=development
 EXPOSE 5000
 
 CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--worker-class", "eventlet", "-w", "1", "app:app"]
+
+
+
+
+

@@ -25,14 +25,13 @@ def asignar_tipo_fallo(rms,axis):
     
 def generar_caracteristicas(df):
     try:
-        if len(df) < 800:
-            raise ValueError("El DataFrame no contiene suficientes datos para el procesamiento")
+        if not {'Timestamp','Value'}.issubset(df.columns):
+            raise ValueError("Las columnas 'Timestamp' y 'Value' no están presentes en el DataFrame")
+        
         ## Aqui falta considerar la cantidad de datos necesarios
         print('Dataframe cargado con exito',df.head())
         print('Columnas encontradas en el dataset',df.columns.to_list())
 
-        if not {'Timestamp', 'Value'}.issubset(df.columns):
-            raise ValueError("Las columnas 'Timestamp' y 'Value' no están presentes en el DataFrame")
         df['Rms'] = df.groupby('Timestamp')['Value'].transform(calcular_rms)
         df['Estado'] = df['Rms'].apply(asignar_estado)
         df['Tipo_fallo'] = df.apply(lambda row: asignar_tipo_fallo(row['Rms'],row['Axis']),axis=1)

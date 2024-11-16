@@ -4,8 +4,9 @@ services:
     build: 
       context: .
     environment:
-      - KAFKA_HOST=${KAFKA_HOST}
-      - KAFKA_TOPIC=${KAFKA_TOPIC}
-      - KAFKA_TOPIC_MODEL=${KAFKA_TOPIC_MODEL}
+      - KAFKA_HOST=192.168.0.6:9092
+      - KAFKA_TOPIC=my-topic-ams
+      - KAFKA_TOPIC_MODEL=model-topic
     ports:
       - "8000:8000"
+

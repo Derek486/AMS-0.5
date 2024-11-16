@@ -34,3 +34,4 @@ services:
       - ./front-flask-container/static:/usr/local/app/static
     ports:
       - "5001:5000" 
+    command: gunicorn --workers=1 --threads=2 --worker-class=gevent -b 0.0.0.0:5001 app:app
