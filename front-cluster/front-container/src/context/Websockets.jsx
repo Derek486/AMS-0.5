@@ -16,7 +16,11 @@ export function WebsocketsProvider({ children }) {
     socket.onmessage = (event) => {
       let jsonString = event.data.replace(/'/g, '"');
       const data = JSON.parse(jsonString)
-      toast.success(`${data['message']} para el motor ${data['idMotor']}`)
+      if (data.hasOwnProperty('Tipo_fallo')) {
+        toast.error(`${data['Tipo_fallo']} detectado para el motor ${data['motorName']} (${data['motorId']})`)
+      } else {
+        toast.success(`Ningún fallo detectado en el motor ${data['motorName']} (${data['motorId']})`)
+      }
     };
 
     socket.onclose = () => {
