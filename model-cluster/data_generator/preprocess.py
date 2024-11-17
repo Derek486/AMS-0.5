@@ -1,51 +1,43 @@
 import pandas as pd
-import joblib
-import os
+from sklearn.preprocessing import StandardScaler,LabelEncoder,OrdinalEncoder
 
-# Definir la ruta base actual
-base_path = os.path.dirname(os.path.abspath(__file__))
-
-metadata_path = os.path.join("/app", "data_generator", "model_metadata.pkl")
+scaler = StandardScaler ()
+encoder_estado_fallo = OrdinalEncoder ()
+encoder_axis = LabelEncoder ()
 
 def procesar_datos(df):
     try:
         print("Columnas iniciales:", df.columns)
         print("Primeras filas:\n", df.head())
 
-        # Cargar metadata del modelo
-        metadata = joblib.load(metadata_path)
-        scaler = metadata['scaler']
-        encoder_estado = metadata['encoder_estado']
-        encoder_axis = metadata['encoder_axis']
-        column_order = metadata['column_order_binario']
+        if 'Timestamp' in df.columns and 'Medicion' in df.columns:
+            df = df.drop(columns=['Timestamp', 'Medicion'])
+            print("Columnas después de eliminar 'Timestamp' y 'Medicion':", df.columns)
 
-        if 'Timestamp' not in df.columns or 'Value' not in df.columns:
-            raise ValueError("Faltan las columnas necesarias ('Timestamp', 'Value')")
+        # Verificar si las columnas 'Estado', 'Tipo_fallo' y 'Axis' están en el DataFrame
+        if not {'Estado', 'Tipo_fallo', 'Axis'}.issubset(df.columns):
+            print("Error: Las columnas 'Estado', 'Tipo_fallo' y 'Axis' no se encuentran en el archivo.")
+            return None
+        
+        # Escalar las columnas 'Value' y 'Rms'
+        df[['Value', 'Rms']] = scaler.fit_transform(df[['Value', 'Rms']])
+        print("Después de la escalación de 'Value' y 'Rms':\n", df[['Value', 'Rms']].head())
 
-        # Asegurar que los nombres de las columnas coincidan con los nombres esperados durante el entrenamiento
-        df = df.rename(columns={'Rms': 'rms', 'Value': 'value'})
+        # Codificar las columnas 'Estado' y 'Tipo_fallo'
+        df[['Estado', 'Tipo_fallo']] = encoder_estado_fallo.fit_transform(df[['Estado', 'Tipo_fallo']])
+        print("Después de la codificación ordinal de 'Estado' y 'Tipo_fallo':\n", df[['Estado', 'Tipo_fallo']].head())
 
-        # Escalar las columnas 'value' y 'rms'
-        df[['value', 'rms']] = scaler.transform(df[['value', 'rms']])
-        print("Después de la escalación de 'value' y 'rms':\n", df[['value', 'rms']].head())
-
-        # Renombrar las columnas de nuevo para que coincidan con el formato final esperado
-        df = df.rename(columns={'rms': 'Rms', 'value': 'Value'})
-
-        # Codificar la columna 'Estado' usando el codificador ajustado
-        df['Estado'] = encoder_estado.transform(df['Estado'].values)
-        print("Después de la codificación ordinal de 'Estado':\n", df[['Estado']].head())
-
-        # Codificar la columna 'Axis' usando el codificador ajustado
-        df['Axis'] = encoder_axis.transform(df['Axis'])
+        # Codificar la columna 'Axis' si no está en formato numérico
+        df['Axis'] = encoder_axis.fit_transform(df['Axis'])
         print("Después de la codificación de 'Axis':\n", df[['Axis']].head())
 
-        # Reordenar las columnas para asegurar compatibilidad con el modelo
+        # *** Reordenar columnas aquí ***
+        column_order = ['Value', 'Rms', 'Axis', 'Estado']  # Orden esperado por el modelo
         df = df[column_order]
         print("Datos reordenados para el modelo:\n", df.head())
 
         print("Datos después del preprocesamiento:\n", df.head())
-
+        
         return df  # Retorna el DataFrame preprocesado listo para el modelo
 
     except Exception as e:
