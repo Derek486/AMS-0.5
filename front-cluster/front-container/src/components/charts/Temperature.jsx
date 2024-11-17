@@ -44,6 +44,9 @@ export default function Temperature({ motor }) {
         text: "Temperatura"
       }
     },
+    dataLabels: {
+      enabled: false
+    }
   })
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import useMotores from "../hooks/useMotores";
 import IconComponent from "../components/IconComponent";
 import FormMotor from "../components/FormMotor";
@@ -9,10 +9,12 @@ import api from "../api.js";
 import TableRowMotor from "../components/TableRowMotor.jsx";
 import clsx from "clsx";
 import useUser from "../hooks/useUser.js";
+import { WebsocketsContext } from '../context/Websockets.jsx'
 
 export function MotorsPage() {
   const user = useUser()
   const { motores, setMotores } = useMotores();
+  const [_, alertas] = useContext(WebsocketsContext);
   const [ metricsMode, setMetricsMode ] = useState(false)
   const [ dialogState, setDialogState ] = useState({
     motorEditing: null,
@@ -108,6 +110,7 @@ export function MotorsPage() {
                     handleDelete={handleDelete} 
                     handleEdit={handleEdit} 
                     metricsMode={metricsMode}
+                    alerts={alertas.find(a => a.motorId == motor.id)}
                   />
                 ))}
               </div>

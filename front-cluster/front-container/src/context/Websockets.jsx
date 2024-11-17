@@ -3,12 +3,14 @@ import { Button, Dialog, DialogBody, DialogFooter } from '@material-tailwind/rea
 import { MODEL_HOST } from "../config";
 import IconComponent from '../components/IconComponent'
 import toast from "react-hot-toast";
+import useAlertas from "../hooks/useAlertas.js";
 
-const WebsocketsContext = createContext()
+export const WebsocketsContext = createContext()
 
 export function WebsocketsProvider({ children }) {
   let socket;
   const [lastError, setLastError] = useState(null)
+  const { alertas, fetchalertas } = useAlertas()
 
   useEffect(() => {
     socket = new WebSocket(`ws://${MODEL_HOST}/ws`);
@@ -21,6 +23,7 @@ export function WebsocketsProvider({ children }) {
       let jsonString = event.data.replace(/'/g, '"');
       const data = JSON.parse(jsonString)
       if (data.hasOwnProperty('Tipo_fallo')) {
+        fetchalertas()
         setLastError(({
           errorType: data['Tipo_fallo'],
           motorId: data['motorId'],
@@ -42,7 +45,7 @@ export function WebsocketsProvider({ children }) {
   }, []);
 
   return (
-    <WebsocketsContext.Provider value={[socket]}>
+    <WebsocketsContext.Provider value={[socket, alertas]}>
       <>
         <Dialog open={lastError !== null} handler={() => setLastError(null)} size="sm">
           <DialogBody>
