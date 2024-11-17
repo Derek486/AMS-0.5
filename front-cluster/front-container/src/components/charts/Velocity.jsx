@@ -1,53 +1,61 @@
-import ReactApexChart from 'react-apexcharts'
+import ReactApexChart from 'react-apexcharts';
 import useData from "../../hooks/useData";
 import { useEffect, useState } from 'react';
 
 export default function Velocity({ motor }) {
-  const [ data ] = useData({ type: 'velocidad', motor })
-  const [ options, setOptions ] = useState({
+  const [data] = useData({ type: 'velocidad', motor });
+  const [options, setOptions] = useState({
     series: [
       {
-        name: 'X Axis',
-        data: []
-      },
-      {
-        name: 'Y Axis',
-        data: []
-      },
-      {
-        name: 'Z Axis',
+        name: 'Magnitud',
         data: []
       }
     ],
     chart: {
       type: "area",
-      height: 350
+      height: 350,
+      toolbar: {
+        show: false
+      }
     },
     xaxis: {
-      type: 'numeric'
+      type: 'datetime',
+      labels: {
+        format: 'HH:mm:ss'
+      },
+      title: {
+        text: 'Tiempo'
+      }
     },
     yaxis: {
       title: {
         text: 'Magnitud'
       },
-      decimalsInFloat: 3,
+      decimalsInFloat: 3
+    },
+    dataLabels: {
+      enabled: false
     }
-  })
+  });
 
   useEffect(() => {
-    const newData = data.map(({ value, timestamp }) => {
-      return {
-        x: new Date(timestamp).getTime(),
-        y: value,
-      };
-    });
-    console.log(newData);
+    const newData = data.map(({ value, timestamp }) => ({
+      x: timestamp,
+      y: value
+    }));
     
-  }, [data])
+    setOptions(prev => ({
+      ...prev,
+      series: [
+        {
+          name: 'Magnitud',
+          data: newData
+        }
+      ]
+    }));
+  }, [data]);
 
   return (
-    <>
-      <ReactApexChart options={options} series={options.series} type="area" height={350} />
-    </>
-  )
+    <ReactApexChart options={options} series={options.series} type="area" height={350} />
+  );
 }

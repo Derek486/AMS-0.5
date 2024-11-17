@@ -8,15 +8,27 @@ import Velocity from "./charts/Velocity.jsx"
 import Temperature from "./charts/Temperature.jsx"
 import TableHeader from "./TableHeader.jsx"
 import ChartDialog from "./charts/ChartDialog.jsx"
+import AlertCard from "./AlertCard.jsx"
 
-export default function TableRowMotor({ motor, handleEdit, handleDelete, metricsMode }) {
+export default function TableRowMotor({ motor, handleEdit, handleDelete, metricsMode, alerts = {} }) {
   const [metricOpen, setMetricOpen] = useState(null)
-  const number = parseInt(Math.random()*10)
+
   return (
     <>
       {metricsMode ? (
         <Drawer open={metricOpen === 3} onClose={() => setMetricOpen(null)} placement="right" className="shadow-none">
-          asdasdasd
+          <div className="h-full flex flex-col">
+            <header className="flex justify-center items-center p-4 bg-obsidian w-full">
+              <p className="text-white text-center">Listado de alertas <br /> <strong>({motor.nombre})</strong></p>
+            </header>
+            <div className="p-4 flex flex-col gap-2 overflow-auto flex-1 h-0">
+              {
+                alerts?.alertas 
+                ? (alerts?.alertas || []).map((a, index) => <AlertCard key={index} alert={a} />)
+                : <center><p>No hay ningúna alerta</p></center>
+              }
+            </div>
+          </div>
         </Drawer>
       ) : null}
 
@@ -94,30 +106,31 @@ export default function TableRowMotor({ motor, handleEdit, handleDelete, metrics
                   icon="record" 
                   className={
                     clsx(["w-5 h-5", {
-                      'fill-green-700': number >= 0 && number <= 3,
-                      'fill-amber-600': number >= 4 && number <= 7,
-                      'fill-red-500': number >= 8
+                      'fill-green-700': !(alerts?.alertas) || (alerts.alertas.length >= 0 && alerts.alertas.length <= 3),
+                      'fill-amber-600': alerts?.alertas && alerts.alertas.length >= 4 && alerts.alertas.length <= 7,
+                      'fill-red-500': alerts?.alertas && alerts.alertas.length >= 8
                     }])
                   } 
                 />
               </TableCell>
               <TableCell className="max-w-64">
-                <div className="flex gap-2">
-                  <IconComponent icon="activity" className="w-5 h-5 text-sky" />
-                  {parseInt(Math.random()*1000)}
-                </div>
+                <Tooltip content="Desalineamiento">
+                  <div className="flex gap-2">
+                    <IconComponent icon="activity" className="w-5 h-5 text-sky" />
+                    {(alerts?.alertas || []).filter(a => a.errorType == "Desalineacion del eje").length}
+                  </div>
+                </Tooltip>
               </TableCell>
               <TableCell className="max-w-64">
-                <div className="flex gap-2">
-                  <IconComponent icon="lightning" className="w-5 h-5 text-sky" />
-                  {parseInt(Math.random()*1000)}
-                </div>
+                <Tooltip content="Desgaste">
+                  <div className="flex gap-2">
+                    <IconComponent icon="steps" className="w-5 h-5 text-sky" />
+                    {(alerts?.alertas || []).filter(a => a.errorType == "Desgaste del rodamiento").length}
+                  </div>
+                </Tooltip>
               </TableCell>
               <TableCell className="max-w-64">
-                <div className="flex gap-2">
-                  <IconComponent icon="thermometer" className="w-5 h-5 text-sky" />
-                  {parseInt(Math.random()*1000)}
-                </div>
+                &nbsp;
               </TableCell>
               <TableCell className="max-w-64 justify-center">
                 <Tooltip content="Show alerts">

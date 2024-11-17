@@ -1,6 +1,7 @@
-function enviarData(dataType) {
+function enviarData(dataType, motor) {
     const mensaje = {
-        data_type: dataType
+        data_type: dataType,
+        motor
     };
 
     fetch(`/send_prediction_data`, {
@@ -10,14 +11,8 @@ function enviarData(dataType) {
         },
         body: JSON.stringify(mensaje)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error("Error en la respuesta del servidor");
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Mensaje enviado al backend:", data);
+    .then(_ => {
+        console.log(dataType, " enviado exitosamente");
     })
     .catch(error => {
         console.error("Error al enviar datos:", error);

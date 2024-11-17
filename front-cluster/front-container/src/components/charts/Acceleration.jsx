@@ -1,13 +1,13 @@
 import ReactApexChart from 'react-apexcharts'
 import useData from "../../hooks/useData";
+import { useEffect, useState } from 'react';
 
 export default function Acceleration({ motor }) {
   const [ data ] = useData({ type: 'aceleracion', motor })
-
-  const options = {
+  const [options, setOptions] = useState({
     series: [{
       name: "RMS",
-      data: [12, 34, 22, 45, 30, 60, 75, 85, 100]
+      data: []
     }],
     options: {
       chart: {
@@ -35,10 +35,39 @@ export default function Acceleration({ motor }) {
         },
       },
       xaxis: {
-        categories: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep'],
-      }
+        type: 'datetime',
+        labels: {
+          format: 'HH:mm:ss'
+        },
+        title: {
+          text: 'Tiempo'
+        }
+      },
+      yaxis: {
+        title: {
+          text: 'Magnitud'
+        },
+        decimalsInFloat: 3
+      },
     },
-  };
+  })
+
+  useEffect(() => {
+    const newData = data.map(({ value, timestamp }) => ({
+      x: timestamp,
+      y: value
+    }));
+    
+    setOptions(prev => ({
+      ...prev,
+      series: [
+        {
+          name: 'RMS',
+          data: newData
+        }
+      ]
+    }));
+  }, [data])
 
   return (
     <>

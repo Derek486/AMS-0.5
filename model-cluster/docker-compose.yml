@@ -4,9 +4,17 @@ services:
     build: 
       context: .
     environment:
-      - KAFKA_HOST=192.168.0.6:9092
-      - KAFKA_TOPIC=my-topic-ams
-      - KAFKA_TOPIC_MODEL=model-topic
+      - KAFKA_HOST=${KAFKA_HOST}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - KAFKA_TOPIC_MODEL=${KAFKA_TOPIC_MODEL}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
     ports:
-      - "8000:8000"
+      - "4321:4321"
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always

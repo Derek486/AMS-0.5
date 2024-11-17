@@ -27,6 +27,11 @@ services:
       - zookeeper
     networks:
       - kafka-network
+    healthcheck:
+      test: kafka-cluster cluster-id --bootstrap-server kafka:9092
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   proxy:
     image: nginx:alpine
@@ -45,10 +50,12 @@ services:
       context: ./front-cluster/front-container
       args:
         - VITE_API_URL=http://localhost:8081
+        - VITE_MODEL_HOST=localhost:4321
     volumes:
       - ./front-cluster/front-container/nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
       - VITE_API_URL=http://localhost:8081
+      - VITE_MODEL_HOST=localhost:4321
     depends_on:
       - "worker.dotnet"
     networks:
@@ -61,6 +68,7 @@ services:
     environment:
       - KAFKA_BROKER=kafka:9092
       - KAFKA_TOPIC=${KAFKA_TOPIC:-vibration-topic}
+      - KAFKA_TOPIC_MODEL=${KAFKA_TOPIC_MODEL:-model-topic}
       - MOTORES_API_URL=http://worker.dotnet:8080
     volumes:
       - ./front-cluster/front-flask-container/templates:/usr/local/app/templates
@@ -107,10 +115,38 @@ services:
       worker.db:
         condition: service_healthy
       kafka:
-        condition: service_started
+        condition: service_healthy
     networks:
       - back-network
       - kafka-network
+  
+  model:
+    build: 
+      context: ./model-cluster
+    environment:
+      - KAFKA_HOST=kafka:9092
+      - KAFKA_TOPIC_MODEL=model-topic
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+    ports:
+      - "4321:4321"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - kafka-network
+      - model-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - model-network
   
 networks:
   kafka-network:
@@ -118,4 +154,6 @@ networks:
   back-network:
     driver: bridge
   front-network:
+    driver: bridge
+  model-network:
     driver: bridge

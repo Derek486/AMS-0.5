@@ -73,24 +73,31 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- Nueva Sección para la Prueba de Predicción de Fallos -->
-                <section class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-min shadow-md mt-4">
-                    <h2 class="text-center text-light-sky font-bold text-lg">Prueba de Predicción de Fallos</h2>
-                    <div class="flex justify-center p-4">
-                        <table class="table-auto w-full max-w-md text-center border-collapse">
-                            <tr>
-                                <td>
-                                    <button onclick="enviarData('Desalineamiento')" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow">Data 1</button>
-                                </td>
-                                <td>
-                                    <button onclick="enviarData('Desgaste_rodamiento')" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow">Data 2</button>
-                                </td>
-                                <td>
-                                    <button onclick="enviarData('Fallo_Ninguno')" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow">Data 3</button>
-                                </td>
-                            </tr>
-                        </table>
+                <section class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-min shadow-md">
+                    <!-- Aquí va la sección de la tabla actual de motores -->
+                    <div class="shadow-sm rounded-lg w-[440px]">
+                        <header class="flex w-full">
+                            {% with content='Fail Prediction',className='w-72 text-center' %}
+                                {% include 'components/table_header.html' %}
+                            {% endwith %}
+                        </header>
+                        <div class="flex flex-col w-full">
+                            {% for motor in motors %}
+                                <div class="flex flex-1 odd:bg-light-smoke">
+                                    <div class="flex gap-2 w-72 flex-1 h-[53px] justify-center items-center">
+                                        {% with motor=motor,data_type='Desalineamiento',label='Desalineamiento' %}
+                                            {% include 'components/mui_button.html' %}
+                                        {% endwith %}
+                                        {% with motor=motor,data_type='Desgaste_rodamiento',label='Desgaste' %}
+                                            {% include 'components/mui_button.html' %}
+                                        {% endwith %}
+                                        {% with motor=motor,data_type='Fallo_Ninguno',label='Ninguno' %}
+                                            {% include 'components/mui_button.html' %}
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </section>
             </div>

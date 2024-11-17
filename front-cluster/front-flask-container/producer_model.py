@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Configuración de Kafka
-KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9092')  # Asegúrate de que la IP y el puerto estén correctos
+KAFKA_BROKER = os.getenv('KAFKA_BROKER', 'localhost:9092')
 KAFKA_TOPIC_MODEL = os.getenv('KAFKA_TOPIC_MODEL', 'model-topic')
 
 # Rutas de los archivos CSV
@@ -60,7 +60,7 @@ def get_csv_file(data_type):
     df = read_csv(file_path)
     return df
 
-def process_data_type(data_type, batch_size=200):
+def process_data_type(motor, data_type, batch_size=200):
     """Procesa el tipo de dato recibido, muestra el head en los logs y envía los datos en lotes a Kafka."""
     df = get_csv_file(data_type)
     if df is not None:
@@ -76,7 +76,8 @@ def process_data_type(data_type, batch_size=200):
                 'Value': row['Value'],
                 'Medicion': row['Medicion'],
                 'Axis': row['Axis'],
-                'data_type': data_type
+                'MotorId': motor['id'],
+                'MotorName': motor['nombre'],
             }
             messages.append(message)
 

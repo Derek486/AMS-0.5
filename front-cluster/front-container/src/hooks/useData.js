@@ -7,7 +7,6 @@ export default function useData({ type, motor }) {
   useEffect(() => {
     api.get(`api/motores/${type}/${motor.id}`)
       .then(res => {
-        console.log(res);
         setData(res.data)
       })
       .catch(err => {
