@@ -28,7 +28,8 @@
                 </div>
             </header>
             <div class="flex gap-4 p-4 justify-center flex-1 h-0">
-                <section  class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-min shadow-md">
+                <section class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-min shadow-md">
+                    <!-- Aquí va la sección de la tabla actual de motores -->
                     <div class="shadow-sm rounded-lg w-[920px]">
                         <header class="flex w-full">
                             {% with content='ID',className='max-w-24' %}
@@ -72,11 +73,32 @@
                         </div>
                     </div>
                 </section>
+
+                <!-- Nueva Sección para la Prueba de Predicción de Fallos -->
+                <section class="dark:bg-midnight rounded-md flex flex-col gap-4 overflow-auto max-h-min shadow-md mt-4">
+                    <h2 class="text-center text-light-sky font-bold text-lg">Prueba de Predicción de Fallos</h2>
+                    <div class="flex justify-center p-4">
+                        <table class="table-auto w-full max-w-md text-center border-collapse">
+                            <tr>
+                                <td>
+                                    <button onclick="enviarData('Desalineamiento')" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow">Data 1</button>
+                                </td>
+                                <td>
+                                    <button onclick="enviarData('Desgaste_rodamiento')" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow">Data 2</button>
+                                </td>
+                                <td>
+                                    <button onclick="enviarData('Fallo_Ninguno')" class="bg-blue-500 text-white px-4 py-2 rounded-md shadow">Data 3</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
 
     <script src="/static/dist/js/socket.io.min.js"></script>
     <script src="/static/dist/js/metrics.js"></script>
+    <script src="/static/dist/js/datamodel.js"></script>
 </body>
 </html>

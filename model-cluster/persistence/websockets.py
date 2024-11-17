@@ -12,7 +12,6 @@ async def websocket_endpoint(websocket: WebSocket):
             data = await websocket.receive_text()
             print(f"Mensaje recibido desde el cliente: {data}")
             # Enviar datos de prueba al cliente
-            await websocket.send_text("Hola desde Fastapi por websockets")
     except WebSocketDisconnect:
         clients.remove(websocket)
         print("Cliente desconectado")
