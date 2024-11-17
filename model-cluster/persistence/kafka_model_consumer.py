@@ -25,14 +25,11 @@ timer_started = False
 
 def check_and_process_batch():
     global vibration_data_model_list
-    print("Entrando a check_and_process_batch...")
     # Verificar si tenemos datos acumulados
     if vibration_data_model_list:
-        print(f"Procesando lote de {len(vibration_data_model_list)} registros...")
         
         # Convertir la lista en un DataFrame
         df = pd.DataFrame(vibration_data_model_list, columns=['Timestamp', 'Value', 'Medicion', 'Axis', 'MotorId', 'MotorName'])
-        print(f"DataFrame creado con {len(df)} filas.")
 
         motor_id = df.iloc[0]['MotorId']
         motor_name = df.iloc[0]['MotorName']
@@ -56,18 +53,14 @@ def check_and_process_batch():
         expected_columns = ['Value', 'Rms', 'Axis', 'Estado']
         try:
             df = df[expected_columns]
-            print(f"Datos reordenados para el modelo:\n{df.head()}")
         except KeyError as e:
             print(f"Error: Faltan columnas necesarias para el modelo: {e}")
             return
 
         # **Verificar si los modelos se cargan correctamente**
         try:
-            print("Cargando modelos SVM...")
             svm_binario_model = joblib.load(svm_binario_model_path)
-            print("Modelo binario cargado correctamente.")
             svm_fallo_model = joblib.load(svm_fallo_model_path)
-            print("Modelo de fallo cargado correctamente.")
         except Exception as e:
             print(f"Error al cargar los modelos: {e}")
             return
@@ -82,7 +75,6 @@ def check_and_process_batch():
                 return
 
             X_binario = df[column_order_binario]  # Reordenar explícitamente
-            print(f"Preparando datos para el modelo binario: {X_binario.head()}")
 
             y_pred_bin = svm_binario_model.predict(X_binario)
 
@@ -138,13 +130,7 @@ def consume_model_data():
 
         for message in model_consumer:
             model_data = json.loads(message.value)
-            print(f"Datos recibidos en el model-topic: {model_data}")
-
-            # Eliminar el campo data_type si existe
             model_data.pop('data_type', None)
-            print(f"Campos después de eliminar data_type: {list(model_data.keys())}")
-
-            # Verificación y acumulación
             if all(key in model_data for key in ['Timestamp', 'Value', 'Medicion', 'Axis', 'MotorId', 'MotorName']):
                 data_array = [
                     model_data['Timestamp'],
@@ -155,12 +141,7 @@ def consume_model_data():
                     model_data['MotorName'],
                 ]
                 vibration_data_model_list.append(data_array)
-                print(f"Datos acumulados: {len(vibration_data_model_list)}")
-
-            # Actualizar el tiempo de recepción
             last_received_time = time.time()
-
-            # Activar temporizador para esperar a más datos
             if not timer_started:
                 timer_started = True
                 threading.Thread(target=wait_for_completion, args=(last_received_time,)).start()
