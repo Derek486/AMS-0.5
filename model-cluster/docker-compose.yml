@@ -5,7 +5,6 @@ services:
       context: .
     environment:
       - KAFKA_HOST=${KAFKA_HOST}
-      - KAFKA_TOPIC=${KAFKA_TOPIC}
       - KAFKA_TOPIC_MODEL=${KAFKA_TOPIC_MODEL}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}

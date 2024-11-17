@@ -8,5 +8,5 @@ sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-
 sudo chmod +x /usr/local/bin/docker-compose
 
 sudo yum install git -y
-git clone https://github.com/JuanJoseTCP/AMS-0.5.git
+git clone --recurse-submodules https://github.com/JuanJoseTCP/AMS-0.5.git
 cd AMS-0.5
