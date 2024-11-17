@@ -30,7 +30,7 @@ socketio = SocketIO(app, manage_session=False, cors_allowed_origins="*")
 app.logger.info("Aplicación Flask iniciada correctamente")
 
 HOST = os.getenv('APP_DEV_HOST', '0.0.0.0')
-PORT = int(os.getenv('APP_DEV_PORT', '5001'))
+PORT = int(os.getenv('APP_DEV_PORT', '5000'))
 
 MOTORES_API_URL = os.getenv('MOTORES_API_URL')
 

@@ -15,23 +15,22 @@ services:
     build:
       context: ./front-container
       args:
-        - VITE_API_URL=http://example-api-url.com/api
+        - VITE_API_URL=${MOTORES_API_URL}
+        - VITE_MODEL_HOST=${MODEL_HOST}
     volumes:
       - ./front-container/nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
-      - VITE_API_URL=http://example-api-url.com/api
+      - VITE_API_URL=${MOTORES_API_URL}
+      - VITE_MODEL_HOST=${MODEL_HOST}
 
   app.flask:
     build: 
       context: ./front-flask-container
     environment:
-      - KAFKA_BROKER=192.168.0.6:9092
-      - KAFKA_TOPIC=my-topic-ams
-      - KAFKA_TOPIC_MODEL=model-topic
-      - MOTORES_API_URL=http://example-api-url.com/api
+      - KAFKA_BROKER=${KAFKA_BROKER}
+      - KAFKA_TOPIC=${KAFKA_TOPIC}
+      - KAFKA_TOPIC_MODEL=${KAFKA_TOPIC_MODEL}
+      - MOTORES_API_URL=${MOTORES_API_URL}
     volumes:
       - ./front-flask-container/templates:/usr/local/app/templates
       - ./front-flask-container/static:/usr/local/app/static
-    ports:
-      - "5001:5000" 
-    command: gunicorn --workers=1 --threads=2 --worker-class=gevent -b 0.0.0.0:5001 app:app

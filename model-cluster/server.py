@@ -12,7 +12,7 @@ import os
 app = FastAPI()
 
 HOST = os.getenv('MODEL_DEV_HOST', '0.0.0.0')
-PORT = int(os.getenv('MODEL_DEV_PORT', '8000'))
+PORT = int(os.getenv('MODEL_DEV_PORT', '4321'))
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

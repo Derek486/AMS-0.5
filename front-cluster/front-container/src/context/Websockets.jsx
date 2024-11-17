@@ -1,5 +1,6 @@
 import { createContext, useEffect } from "react";
 import toast from "react-hot-toast";
+import { MODEL_HOST } from "../config";
 
 const WebsocketsContext = createContext()
 
@@ -7,7 +8,7 @@ export function WebsocketsProvider({ children }) {
   let socket;
 
   useEffect(() => {
-    socket = new WebSocket('ws://localhost:8000/ws');
+    socket = new WebSocket(`ws://${MODEL_HOST}/ws`);
 
     socket.onopen = () => {
       console.log('Conectado al WebSocket')
