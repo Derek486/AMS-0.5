@@ -7,6 +7,7 @@ import asyncio
 import pandas as pd
 from data_generator.feature_generator import generar_caracteristicas
 from data_generator.preprocess import procesar_datos
+from .database import guardar_alerta
 import joblib
 import time
 
@@ -99,6 +100,7 @@ def check_and_process_batch():
             if fallo_detectado:
                 tipo_fallo_predominante = max(tipo_fallo_counter, key=tipo_fallo_counter.get)
                 result = {"prediction": "Fallo detectado", "Tipo_fallo": tipo_fallo_predominante, "motorId": f'{motor_id}', "motorName": motor_name}
+                asyncio.run(guardar_alerta(f'{motor_id}', motor_name, result))
             else:
                 result = {"prediction": "Ningún fallo detectado", "motorId": f'{motor_id}', "motorName": motor_name}
 

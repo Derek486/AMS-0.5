@@ -126,13 +126,27 @@ services:
     environment:
       - KAFKA_HOST=kafka:9092
       - KAFKA_TOPIC_MODEL=model-topic
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
     ports:
       - "4321:4321"
     depends_on:
       kafka:
         condition: service_healthy
+      redis:
+        condition: service_started
     networks:
       - kafka-network
+      - model-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - model-network
   
 networks:
   kafka-network:
@@ -140,4 +154,6 @@ networks:
   back-network:
     driver: bridge
   front-network:
+    driver: bridge
+  model-network:
     driver: bridge
