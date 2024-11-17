@@ -3,8 +3,10 @@ import numpy as np
 import math
 
 def calcular_rms(grupo):
-    suma_cuadrados = sum(math.pow(valor,2) for valor in grupo)
-    rms = math.sqrt(suma_cuadrados/len(grupo))
+    if len(grupo) == 0:
+        return 0  # Manejo para evitar división por 0
+    suma_cuadrados = sum(math.pow(valor, 2) for valor in grupo)
+    rms = math.sqrt(suma_cuadrados / len(grupo))
     return rms
 
 def asignar_estado(rms):
@@ -34,7 +36,6 @@ def generar_caracteristicas(df):
 
         df['Rms'] = df.groupby('Timestamp')['Value'].transform(calcular_rms)
         df['Estado'] = df['Rms'].apply(asignar_estado)
-        df['Tipo_fallo'] = df.apply(lambda row: asignar_tipo_fallo(row['Rms'],row['Axis']),axis=1)
         print("Columnas generadas",df.head())
         return df   
     except Exception as e:
