@@ -9,7 +9,9 @@ Para clonar este repositorio, asegúrate de tener Git instalado en tu máquina. 
 ```bash
 git clone --recurse-submodules https://github.com/JuanJoseTCP/AMS-0.5.git
 ```
-
+```bash
+cd AMS-0.5
+```
 ## Tabla de Contenidos
 
 1. [Arquitectura del Proyecto](#arquitectura-del-proyecto)
